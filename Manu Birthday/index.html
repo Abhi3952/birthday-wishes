@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Manu ❤️</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#ff9ecb,#c27bff);
+    color:white;
+    text-align:center;
+    overflow-x:hidden;
+}
+
+/* ===== Landing ===== */
+#landing{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.title{
+    font-size:3rem;
+    text-shadow:0 0 20px white;
+}
+.glow-btn{
+    padding:15px 35px;
+    font-size:1.3rem;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#d63384;
+    box-shadow:0 0 30px white;
+    cursor:pointer;
+    transition:.3s;
+}
+.glow-btn:hover{transform:scale(1.1)}
+
+/* ===== Main ===== */
+#main{display:none;padding:30px}
+#typewriter{font-size:2rem;min-height:120px;margin-bottom:30px}
+
+/* ===== Hearts ===== */
+canvas{
+    position:fixed;
+    top:0;left:0;
+    z-index:-1;
+}
+
+/* ===== Memories ===== */
+.memory-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.memory-card{
+    background:rgba(255,255,255,0.15);
+    padding:10px;
+    border-radius:20px;
+    opacity:0;
+    transform:translateY(40px) scale(.9);
+    animation:show 1s forwards;
+}
+@keyframes show{
+    to{opacity:1;transform:none}
+}
+.memory-card img{
+    width:100%;
+    border-radius:15px;
+}
+.memory-caption{font-weight:bold;margin-top:8px}
+.memory-shayari{font-size:.9rem;color:#ffe6f0}
+
+/* ===== Reasons ===== */
+.reason{
+    opacity:0;
+    animation:fadeUp 1s forwards;
+    margin:10px;
+    font-size:1.3rem;
+}
+@keyframes fadeUp{
+    to{opacity:1;transform:none}
+}
+
+/* ===== Bottom Birthday Animation ===== */
+#birthday-text{
+    margin:100px 0 60px;
+    font-size:3rem;
+    font-weight:bold;
+    animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+    from{text-shadow:0 0 10px white}
+    to{text-shadow:0 0 40px gold,0 0 60px pink}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== MUSIC ===== -->
+<audio id="bgMusic" preload="auto">
+    <source src="audio/birthday.mp3" type="audio/mpeg">
+    <source src="birthday.mp3" type="audio/mpeg">
+</audio>
+
+<div id="landing">
+    <h1 class="title">Happy Birthday My Love ❤️<br>Manu (Chotu)</h1>
+    <button class="glow-btn" onclick="begin()">Click to Begin 🎁</button>
+</div>
+
+<canvas id="hearts"></canvas>
+
+<div id="main">
+
+<div id="typewriter"></div>
+
+<h2>Our Memories Together ❤️</h2>
+<div class="memory-container" id="memories"></div>
+
+<h2>Things I Love In You ❤️</h2>
+<div id="reasons"></div>
+
+<!-- ===== Bottom Birthday ===== -->
+<div id="birthday-text">
+🎉 HAPPY BIRTHDAY MY LOVE 🎉<br>
+❤️ MANU ❤️
+</div>
+
+</div>
+
+<script>
+/* ===== Begin ===== */
+function begin(){
+    const music=document.getElementById("bgMusic");
+    music.currentTime=0;
+    music.loop = true;
+    music.play().catch(()=>{
+        alert("Cannot play audio — make sure 'birthday.mp3' is next to IMA.html or inside the 'audio/' folder. Also click the button to allow playback in your browser.");
+        console.error('Audio play failed. Checked sources:', Array.from(music.getElementsByTagName('source')).map(s=>s.src));
+    });
+
+    document.getElementById("landing").style.display="none";
+    document.getElementById("main").style.display="block";
+
+    typeWriter();
+    showReasons();
+    loadMemories();
+    autoScroll();
+}
+
+/* ===== Auto Scroll ===== */
+function autoScroll(){
+    let pos=0;
+    let scroll=setInterval(()=>{
+        window.scrollBy(0,1);
+        pos++;
+        if(pos>document.body.scrollHeight) clearInterval(scroll);
+    },40); // slow smooth
+}
+
+/* ===== Typewriter ===== */
+let text="You are the best thing that ever happened to me. My Chotu, my love, my everything ❤️";
+let i=0;
+function typeWriter(){
+    if(i<text.length){
+        document.getElementById("typewriter").innerHTML+=text.charAt(i);
+        i++;
+        setTimeout(typeWriter,50);
+    }
+}
+
+/* ===== Reasons ===== */
+let reasons=[
+"Aapki smile sabse pyari ❤️",
+"You are my peace",
+"You support me always",
+"Your voice heals me",
+"My Chotu forever 💕"
+];
+function showReasons(){
+    let box=document.getElementById("reasons");
+    reasons.forEach((r,i)=>{
+        setTimeout(()=>{
+            let d=document.createElement("div");
+            d.className="reason";
+            d.innerText=r;
+            box.appendChild(d);
+        },i*700);
+    });
+}
+
+/* ===== Memories ===== */
+let memories=[
+{img:"First.jpeg",cap:"Our First Pic",sh:"Forever ❤️"},
+{img:"date.jpeg",cap:"First Date",sh:"Tum aur main"},
+{img:"Fest.jpeg",cap:"Fest Day",sh:"Laughs"},
+{img:"masuri.jpeg",cap:"Mussoorie",sh:"Mountains & you"}
+];
+function loadMemories(){
+    let c=document.getElementById("memories");
+    memories.forEach((m,i)=>{
+        let d=document.createElement("div");
+        d.className="memory-card";
+        d.style.animationDelay=`${i*0.4}s`;
+        d.innerHTML=`
+        <img src="${m.img}">
+        <div class="memory-caption">${m.cap}</div>
+        <div class="memory-shayari">${m.sh}</div>`;
+        c.appendChild(d);
+    });
+}
+
+/* ===== Hearts ===== */
+let canvas=document.getElementById("hearts");
+let ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+let hearts=[];
+for(let i=0;i<40;i++){
+    hearts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*15+8,v:Math.random()+0.5});
+}
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hearts.forEach(h=>{
+        ctx.fillStyle="rgba(255,0,120,0.7)";
+        ctx.beginPath();
+        ctx.arc(h.x,h.y,h.s,0,Math.PI*2);
+        ctx.fill();
+        h.y-=h.v;
+        if(h.y<0)h.y=canvas.height;
+    });
+    requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
